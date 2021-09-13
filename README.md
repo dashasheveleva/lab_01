@@ -176,6 +176,3 @@ void print(const student_t& student, std::ostream& os) {
     }
 }
 ```
-# lab_01
-# lab_01
-# lab_01
