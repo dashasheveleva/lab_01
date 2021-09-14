@@ -29,69 +29,72 @@ string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 
-add_library(lab-01-parser STATIC
+hunter_add_package(nlohmann_json)
+find_package(nlohmann_json CONFIG REQUIRED)
+
+add_library(${PROJECT_NAME} STATIC
   # enum your files and delete this comment
-  /home/daria/CLionProjects/lab_01/sources/source.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/source.cpp
 )
 
 add_executable(demo
-  /home/daria/CLionProjects/lab_01/demo/main.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/source.cpp
 )
 
-target_include_directories(lab-01-parser PUBLIC
-  "$<BUILD_INTERFACE:/home/daria/CLionProjects/lab_01/include>"
+target_include_directories(${PROJECT_NAME} PUBLIC
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:include>"
 )
 
-target_link_libraries(demo lab_01)
+target_link_libraries(demo ${PROJECT_NAME})
 
 if(BUILD_TESTS)
   add_executable(tests
     # TODO: enum your files and delete this comment
-    /home/daria/CLionProjects/lab_01/tests/test.cpp
+          ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
   )
-  target_link_libraries(tests lab-01-parser GTest::gtest_main)
+  target_link_libraries(tests ${CMAKE_CURRENT_SOURCE_DIR} GTest::gtest_main)
   enable_testing()
   add_test(NAME unit_tests COMMAND tests)
 endif()
 
 if(BUILD_COVERAGE)
   set(ENABLE_COVERAGE ON CACHE BOOL "Enable coverage build." FORCE)
-  list(APPEND CMAKE_MODULE_PATH "/home/daria/CLionProjects/lab_01/tools/coverage/cmake")
+  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/coverage/cmake")
   find_package(codecov)
   string(APPEND CMAKE_CXX_FLAGS " --coverage")
-  add_coverage(lab_01)
+  add_coverage(${PROJECT_NAME})
   add_coverage(tests)
   coverage_evaluate()
 endif()
 
 if(BUILD_DOCS)
-  set(DOXYGEN_OUTPUT_DIRECTORY /home/daria/CLionProjects/lab_01/_docs)
+  set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/_docs)
   set(DOXYGEN_EXAMPLE_PATH examples)
   set(DOXYGEN_GENERATE_HTML NO)
   set(DOXYGEN_GENERATE_MAN YES)
   find_package(Doxygen)
   doxygen_add_docs(docs include)
-  install(DIRECTORY /home/daria/CLionProjects/lab_01/man DESTINATION share)
+  install(DIRECTORY ${DOXYGEN_OUTPUT_DIRECTORY}/man DESTINATION share)
   # add_dependencies(install docs) need to call target docs before install or package
 endif()
 
 include(CPackConfig.cmake)
 
-install(TARGETS lab-01-parser demo
-  EXPORT "lab-01-parser-targets"
+install(TARGETS ${PROJECT_NAME} demo
+  EXPORT "${PROJECT_NAME}-targets"
   RUNTIME DESTINATION bin
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   INCLUDES DESTINATION include
 )
 
-install(DIRECTORY /home/daria/CLionProjects/lab_01/include/ DESTINATION include)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
 
-install(EXPORT "lab-01-parser-targets"
-  NAMESPACE "lab-01-parser::"
+install(EXPORT "${PROJECT_NAME}-targets"
+  NAMESPACE "${PROJECT_NAME}::"
   DESTINATION "lib/cmake"
 )
-hunter_add_package(nlohmann_json)
-find_package(nlohmann_json CONFIG REQUIRED)
-target_link_libraries(lab-01-parser nlohmann_json::nlohmann_json)
+
+target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
