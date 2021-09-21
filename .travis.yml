@@ -1,7 +1,33 @@
 os: linux
+sudo: required
 language: minimal
 services:
   - docker
+env:
+  # Based on Ubuntu 18.04
+  # GCC 7.3
+  # clang 7
+  # CMake 3.10
+  # gcovr
+  # jscpd
+  # cpplint
+  - DOCKER_IMAGE="rusdevops/bootstrap:cpp"          # Используется по умолчанию
+  # Based on Alpine 3.10
+  # GCC 8.3
+  # CMake 3.14
+  # gcovr
+  # jscpd
+  # valgrind
+  # Hunter GTest v1.8.0 (cached)
+  # Hunter Boost cached components: exception
+ #                                 filesystem
+ #                                 log
+ #                                 regex
+ #                                 system
+ # - DOCKER_IMAGE="toliak/bootstrap-cpp"            # Для использования снять комментарий
+
+before_script:
+  - docker pull $DOCKER_IMAGE                       # Предварительное скачивание образа
 
 jobs:
   include:
