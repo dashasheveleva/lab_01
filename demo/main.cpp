@@ -85,7 +85,7 @@ int main() {
     throw std::runtime_error{"The value 'count' does not match the number of 'items'"};
   }
 
-  for (auto const& item : data.at("items")) {
+  for (auto const& item : data["items"]) {
     student_t student;
     from_json(item, student);
     students.push_back(student);

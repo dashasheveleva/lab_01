@@ -8,6 +8,7 @@ option(BUILD_TESTS "Build tests" ON)
 option(BUILD_DOCS "Build documentation" OFF)
 option(BUILD_COVERAGE "Build code coverage" OFF)
 
+
 set(
   HUNTER_CACHE_SERVERS
   "https://github.com/bmstu-iu8-cpp-sem-3/hunter-cache"
@@ -25,6 +26,8 @@ project(template VERSION 0.1.0)
 string(APPEND CMAKE_CXX_FLAGS " -pedantic -Werror -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS " -Wno-unused-command-line-argument")
 string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
+add_compile_definitions(JPATH="${CMAKE_CURRENT_SOURCE_DIR}/students.json")
+
 
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
@@ -53,6 +56,7 @@ if(BUILD_TESTS)
           ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
   )
   target_link_libraries(tests ${CMAKE_CURRENT_SOURCE_DIR} GTest::gtest_main)
+  target_link_libraries(tests ${PROJECT_NAME})
   enable_testing()
   add_test(NAME unit_tests COMMAND tests)
 endif()
@@ -96,3 +100,5 @@ install(EXPORT "${PROJECT_NAME}-targets"
 )
 
 target_link_libraries(${PROJECT_NAME} nlohmann_json::nlohmann_json)
+
+
