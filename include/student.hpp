@@ -1,12 +1,12 @@
 // Copyright 2021 Daria <photodoshfy@gmail.com>
 
-#ifndef INCLUDE_SOURCE_HPP_
-#define INCLUDE_SOURCE_HPP_
+#ifndef INCLUDE_STUDENT_HPP_
+#define INCLUDE_STUDENT_HPP_
 
 #include <any>
+#include <string>
 #include <iostream>
 #include <nlohmann/json.hpp>
-
 
 using nlohmann::json;
 
@@ -23,4 +23,4 @@ auto get_debt(const json& j) -> std::any;
 auto get_avg(const json& j) -> std::any;
 auto get_group(const json& j) -> std::any;
 
-#endif // INCLUDE_SOURCE_HPP_
+#endif // INCLUDE_STUDENT_HPP_
