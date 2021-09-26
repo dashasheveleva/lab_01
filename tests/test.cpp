@@ -28,6 +28,16 @@ TEST(ItemsInArray, EmptyTest) {
   bool var= data["items"].size() > 0;
   EXPECT_EQ(var, true);
 }
+TEST(IsInteger, EmptyTest) {
+  std::string jsonPath;
+  jsonPath= JPATH;
+  std::ifstream file{jsonPath};
+  json data;
+  file >> data;
+  std::vector<student_t> students;
+  bool var= data["_meta"]["count"].is_number();
+  EXPECT_EQ(var, true);
+}
 TEST(MetaCunt_LenItems, EmptyTest) {
   std::string jsonPath;
   jsonPath= JPATH;
