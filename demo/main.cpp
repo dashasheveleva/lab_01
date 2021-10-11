@@ -62,7 +62,7 @@ void print(const std::vector<student_t>& students, std::ostream& os) {
 
 int main() {
   std::string jsonPath= "/home/daria/CLionProjects/lab_01/students.json";
-  if (jsonPath.empty() == 0) {
+  if (jsonPath.empty()) {
     throw std::runtime_error{"No argument containing file path"};
   }
   std::ifstream file{jsonPath};
